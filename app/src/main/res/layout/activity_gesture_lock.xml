@@ -8,19 +8,11 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <LinearLayout
+    <com.royole.yogu.gesturelock.view.GestureLockView
+        android:id="@+id/gestureLockView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        >
-
-        <com.royole.yogu.gesturelock.view.GestureLockView
-            android:id="@+id/gestureLockView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="50dp" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
@@ -45,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dummy_button" />
+                android:text="已解锁" />
 
         </LinearLayout>
     </FrameLayout>

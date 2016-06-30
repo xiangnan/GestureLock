@@ -94,8 +94,16 @@ public class GestureLockActivity extends AppCompatActivity {
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = (GestureLockView)findViewById(R.id.gestureLockView);
-        mContentView.setKey("0124678");
+        mContentView = (GestureLockView) findViewById(R.id.gestureLockView);
+        mContentView.setKeyCode("0124678");
+        mContentView.setOnGestureFinishListener(new GestureLockView.OnGestureFinishListener() {
+            @Override
+            public void OnGestureFinish(Boolean result) {
+                if(result){
+                    toggle();
+                }
+            }
+        });
 
         // Set up the user interaction to manually show or hide the system UI.
 //        mContentView.setOnClickListener(new View.OnClickListener() {

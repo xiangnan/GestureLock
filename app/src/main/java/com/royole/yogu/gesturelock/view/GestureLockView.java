@@ -43,8 +43,8 @@ public class GestureLockView extends View {
     private boolean result;
     private Path linePath = new Path();
     private List<Integer> linedCycles = new ArrayList<Integer>();
-    private OnGestureFinishListener onGestureFinishListener;
-    private String key;
+    public OnGestureFinishListener onGestureFinishListener;
+    private String keyCode;
     private int eventX, eventY;
     private Timer timer;
 
@@ -52,8 +52,9 @@ public class GestureLockView extends View {
         super(context);
         init();
     }
-    public void setKey(String key) {
-        this.key = key;
+
+    public void setKeyCode(String keyCode) {
+        this.keyCode = keyCode;
     }
 
     /**
@@ -64,6 +65,8 @@ public class GestureLockView extends View {
         super(context, attrs);
         init();
     }
+
+    // Private Method
 
     /**
      * Canvas defines shapes that you can draw on the screen,
@@ -127,10 +130,13 @@ public class GestureLockView extends View {
                     linePath.lineTo(cycles[index].getOx(), cycles[index].getOy());
                 }
             }
-            linePath.lineTo(eventX, eventY);
+            if (!isFinished) {
+                linePath.lineTo(eventX, eventY);
+            }
             canvas.drawPath(linePath, linePaint);
         }
     }
+    // End Private - M
 
     /**
      * 3 Handle Layout Events
@@ -168,15 +174,9 @@ public class GestureLockView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d("","onDraw...");
-
+        Log.d("", "onDraw...");
         drawCycle(canvas);
         drawLine(canvas);
-    }
-
-    public void setOnGestureFinishListener(
-            OnGestureFinishListener onGestureFinishListener) {
-        this.onGestureFinishListener = onGestureFinishListener;
     }
 
     @Override
@@ -184,13 +184,13 @@ public class GestureLockView extends View {
         if (!isFinished) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    break;
                 case MotionEvent.ACTION_MOVE:
                     eventX = (int) event.getX();
                     eventY = (int) event.getY();
                     for (int i = 0; i < cycles.length; i++) {
                         if (cycles[i].isPointIn(eventX, eventY)) {
                             cycles[i].setOnTouch(true);
-
                             if (!linedCycles.contains(cycles[i].getNum())) {
                                 linedCycles.add(cycles[i].getNum());
                             }
@@ -203,7 +203,7 @@ public class GestureLockView extends View {
                     for (int i = 0; i < linedCycles.size(); i++) {
                         sb.append(linedCycles.get(i));
                     }
-                    result = key.equals(sb.toString());
+                    result = keyCode.equals(sb.toString());
                     if (onGestureFinishListener != null) {
                         onGestureFinishListener.OnGestureFinish(result);
                     }
@@ -229,7 +229,14 @@ public class GestureLockView extends View {
         return true;
     }
 
-    private interface OnGestureFinishListener {
-        public void OnGestureFinish(Boolean result);
+    // OnGestureFinishListener
+    public interface OnGestureFinishListener {
+        void OnGestureFinish(Boolean result);
     }
+
+    public void setOnGestureFinishListener(
+            OnGestureFinishListener onGestureFinishListener) {
+        this.onGestureFinishListener = onGestureFinishListener;
+    }
+    // End OnGestureFinishListener
 }
